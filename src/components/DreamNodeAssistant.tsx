@@ -25,20 +25,7 @@ const DreamNodeAssistant = () => {
   const generateAIResponse = async (userInput: string) => {
     try {
       console.log('Generating AI response for:', userInput);
-      
-      // First, let's check if we can connect to Supabase
-      const { data: testConnection, error: connectionError } = await supabase
-        .from('_test')
-        .select('*')
-        .limit(1);
-      
-      if (connectionError) {
-        console.log('Supabase connection test error:', connectionError);
-      } else {
-        console.log('Supabase connection successful');
-      }
 
-      // Now try to get the API key
       const { data: apiKey, error: secretError } = await supabase.rpc('get_secret', {
         secret_name: 'OPENAI_API_KEY'
       });
