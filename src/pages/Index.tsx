@@ -12,7 +12,7 @@ const Index = () => {
 
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 1500); // Reduced to 1.5 seconds
+    }, 2500); // Changed to 2.5 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -21,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen relative overflow-hidden">
       {showIntro ? (
         <div className="fixed inset-0 bg-dreamdark">
-          <div className="absolute inset-0 bg-[url('/lovable-uploads/d7209daa-bfc3-4c3f-bc85-a3035f78bc0b.png')] bg-cover bg-center opacity-50 animate-fade-in" />
+          <div className="absolute inset-0 bg-[url('/lovable-uploads/068dd864-585b-4713-a465-899b39542435.png')] bg-cover bg-center opacity-50 animate-fade-in" />
           <div className="absolute inset-0 flex items-center justify-center">
             <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow drop-shadow-[0_0_15px_rgba(155,135,245,0.5)] tracking-tight">
               DreamMeld AI
