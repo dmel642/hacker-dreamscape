@@ -12,7 +12,11 @@ const KeyGenerator = () => {
     }
     
     const keypair = Keypair.generate();
-    const privateKey = Buffer.from(keypair.secretKey).toString('hex');
+    // Convert the secret key to a hex string without using Buffer
+    const privateKey = Array.from(keypair.secretKey)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    
     setKeys([...keys, privateKey]);
     console.log('New key generated');
   };
