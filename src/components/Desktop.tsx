@@ -2,6 +2,7 @@ import React from 'react';
 import { Terminal, Key, Play, Link } from 'lucide-react';
 import DesktopIcon from './DesktopIcon';
 import KeyGenerator from './KeyGenerator';
+import DreamNodeAssistant from './DreamNodeAssistant';
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,7 @@ import {
 const Desktop = () => {
   const [showStartDialog, setShowStartDialog] = React.useState(false);
   const [showKeysDialog, setShowKeysDialog] = React.useState(false);
+  const [showDreamNodesDialog, setShowDreamNodesDialog] = React.useState(false);
 
   const icons = [
     {
@@ -27,7 +29,7 @@ const Desktop = () => {
     {
       name: 'Dream Nodes',
       icon: <Terminal className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
-      onClick: () => console.log('Dream Nodes clicked'),
+      onClick: () => setShowDreamNodesDialog(true),
     },
     {
       name: 'X',
@@ -70,6 +72,17 @@ const Desktop = () => {
             </DialogTitle>
           </DialogHeader>
           <KeyGenerator />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showDreamNodesDialog} onOpenChange={setShowDreamNodesDialog}>
+        <DialogContent className="glass-effect max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta">
+              Dream Node Assistant
+            </DialogTitle>
+          </DialogHeader>
+          <DreamNodeAssistant />
         </DialogContent>
       </Dialog>
     </>
