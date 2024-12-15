@@ -26,24 +26,46 @@ const DreamNodeAssistant = () => {
     try {
       console.log('Generating AI response for:', userInput);
       
+      // First, let's check if we can connect to Supabase
+      const { data: testConnection, error: connectionError } = await supabase
+        .from('_test')
+        .select('*')
+        .limit(1);
+      
+      if (connectionError) {
+        console.log('Supabase connection test error:', connectionError);
+      } else {
+        console.log('Supabase connection successful');
+      }
+
+      // Now try to get the API key
       const { data: apiKey, error: secretError } = await supabase.rpc('get_secret', {
         secret_name: 'OPENAI_API_KEY'
       });
 
+      console.log('API key retrieval attempt completed');
       if (secretError) {
-        console.error('Error fetching OpenAI API key:', secretError);
-        throw new Error('Failed to fetch API key. Please ensure the OpenAI API key is set in Supabase secrets.');
+        console.error('Detailed error fetching OpenAI API key:', {
+          message: secretError.message,
+          details: secretError.details,
+          hint: secretError.hint
+        });
+        throw new Error(`Failed to fetch API key: ${secretError.message}`);
       }
 
       if (!apiKey) {
-        throw new Error('OpenAI API key not found. Please set it in Supabase secrets.');
+        console.error('No API key returned from get_secret');
+        throw new Error('OpenAI API key not found in secrets.');
       }
 
+      console.log('Successfully retrieved API key, initializing OpenAI');
+      
       const openai = new OpenAI({
         apiKey: apiKey,
         dangerouslyAllowBrowser: true
       });
       
+      console.log('Making request to OpenAI');
       const completion = await openai.chat.completions.create({
         messages: [
           {
@@ -71,9 +93,9 @@ const DreamNodeAssistant = () => {
       console.log('AI response received:', responseContent);
       return responseContent;
     } catch (error) {
-      console.error('Error generating AI response:', error);
+      console.error('Detailed error in generateAIResponse:', error);
       if (error instanceof Error) {
-        throw new Error(`Failed to generate response: ${error.message}`);
+        throw new Error(`AI Response Generation Failed: ${error.message}`);
       }
       throw new Error('An unexpected error occurred while generating the response');
     }
@@ -100,7 +122,7 @@ const DreamNodeAssistant = () => {
       };
       setMessages([...newMessages, aiMessage]);
     } catch (error) {
-      console.error('Error in handleSend:', error);
+      console.error('Detailed error in handleSend:', error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to generate response. Please try again.",
