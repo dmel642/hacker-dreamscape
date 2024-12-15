@@ -11,13 +11,6 @@ interface Message {
   content: string;
 }
 
-interface SecretResponse {
-  data: {
-    secret: string | null;
-  } | null;
-  error: Error | null;
-}
-
 const DreamNodeAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -33,18 +26,17 @@ const DreamNodeAssistant = () => {
     try {
       console.log('Generating AI response for:', userInput);
       
-      // Get the OpenAI API key from Supabase with proper type handling
-      const { data, error: secretError }: SecretResponse = await supabase.rpc('get_secret', {
+      const { data: apiKey, error: secretError } = await supabase.rpc('get_secret', {
         name: 'OPENAI_API_KEY'
       });
 
-      if (secretError || !data?.secret) {
+      if (secretError || !apiKey) {
         console.error('Error fetching OpenAI API key:', secretError);
         throw new Error('Failed to fetch OpenAI API key');
       }
 
       const openai = new OpenAI({
-        apiKey: data.secret,
+        apiKey,
         dangerouslyAllowBrowser: true
       });
       
