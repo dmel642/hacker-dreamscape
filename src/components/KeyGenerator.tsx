@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Keypair } from '@solana/web3.js';
 import { Button } from "@/components/ui/button";
 
 const KeyGenerator = () => {
   const [keys, setKeys] = useState<string[]>([]);
+
+  // Load keys from localStorage on component mount
+  useEffect(() => {
+    const savedKeys = localStorage.getItem('mindKeys');
+    if (savedKeys) {
+      setKeys(JSON.parse(savedKeys));
+      console.log('Loaded saved keys from localStorage');
+    }
+  }, []);
 
   const generateKey = () => {
     if (keys.length >= 5) {
@@ -12,13 +21,14 @@ const KeyGenerator = () => {
     }
     
     const keypair = Keypair.generate();
-    // Convert the secret key to a hex string without using Buffer
     const privateKey = Array.from(keypair.secretKey)
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
     
-    setKeys([...keys, privateKey]);
-    console.log('New key generated');
+    const newKeys = [...keys, privateKey];
+    setKeys(newKeys);
+    localStorage.setItem('mindKeys', JSON.stringify(newKeys));
+    console.log('New key generated and saved to localStorage');
   };
 
   return (
@@ -39,7 +49,7 @@ const KeyGenerator = () => {
       <div className="space-y-2">
         {keys.map((key, index) => (
           <div key={index} className="p-3 rounded-lg bg-white/5 text-sm font-mono text-dreamlight break-all">
-            Mind Key {index + 1}: {key.slice(0, 20)}...
+            Mind Key {index + 1}: {key}
           </div>
         ))}
       </div>
