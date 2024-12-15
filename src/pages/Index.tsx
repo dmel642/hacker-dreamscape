@@ -6,9 +6,13 @@ const Index = () => {
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
+    // Preload background image
+    const bgImage = new Image();
+    bgImage.src = '/lovable-uploads/b704c80a-a812-467d-8f19-9e36b1ca66a8.png';
+
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 3000); // 3 seconds
+    }, 1500); // Reduced to 1.5 seconds
 
     return () => clearTimeout(timer);
   }, []);
