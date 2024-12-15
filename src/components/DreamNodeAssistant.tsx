@@ -11,7 +11,7 @@ interface Message {
 const DreamNodeAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant',
+      role: 'assistant' as const,
       content: "Hello! I'm your Dream Node AI co-pilot. I'm here to assist you with digital art, music, and immersive experiences. How can I help you today?"
     }
   ]);
@@ -21,22 +21,22 @@ const DreamNodeAssistant = () => {
     if (!input.trim()) return;
     
     // Add user message
-    const newMessages = [
-      ...messages,
-      { role: 'user', content: input }
-    ];
+    const userMessage: Message = {
+      role: 'user' as const,
+      content: input
+    };
+    
+    const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
     
     // Simulate AI response
     setTimeout(() => {
-      setMessages([
-        ...newMessages,
-        {
-          role: 'assistant',
-          content: "I understand your interest in " + input.toLowerCase() + ". While I'm currently in development, I'm learning to assist with creative projects. Could you tell me more about what you'd like to achieve?"
-        }
-      ]);
+      const aiMessage: Message = {
+        role: 'assistant' as const,
+        content: "I understand your interest in " + input.toLowerCase() + ". While I'm currently in development, I'm learning to assist with creative projects. Could you tell me more about what you'd like to achieve?"
+      };
+      setMessages([...newMessages, aiMessage]);
     }, 1000);
   };
 
