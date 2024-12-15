@@ -93,8 +93,7 @@ const DreamNodeAssistant = () => {
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           <div className="text-lg leading-relaxed text-dreamlight">
-            Each Dream Node securely stores user-generated creative data, enabling on-chain collaboration 
-            in fields like digital art, music, and writing.
+            DreamMeld AI is a decentralized protocol that harmonizes human consciousness with generative AI. By creating "Dream Nodes" and "Mind Keys," it allows individuals to store their creative essence on-chain, enabling intuitive, collaborative creation environments. Each Dream Node securely stores user-generated creative data, enabling on-chain collaboration in fields like digital art, music, and writing. MELD fuses the boundaries between the artist and the canvas, forging a community where collective imagination sparks infinite possibilities.
           </div>
           
           <div className="p-6 rounded-lg glass-effect">
