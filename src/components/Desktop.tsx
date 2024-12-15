@@ -51,6 +51,22 @@ const Desktop = () => {
         ))}
       </div>
 
+      {/* Windows-style taskbar */}
+      <div className="fixed bottom-0 left-0 right-0 h-12 glass-effect border-t border-white/20 flex items-center px-4 z-50">
+        <div className="flex space-x-4">
+          {icons.map((icon, index) => (
+            <button
+              key={index}
+              onClick={icon.onClick}
+              className="flex items-center space-x-2 px-3 py-1.5 rounded hover:bg-white/10 transition-colors"
+            >
+              {icon.icon}
+              <span className="text-sm text-dreamlight">{icon.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <Dialog open={showStartDialog} onOpenChange={setShowStartDialog}>
         <DialogContent className="glass-effect max-w-2xl">
           <DialogHeader>
