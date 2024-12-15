@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import OpenAI from 'openai';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
@@ -30,13 +30,17 @@ const DreamNodeAssistant = () => {
         name: 'OPENAI_API_KEY'
       });
 
-      if (secretError || !apiKey) {
+      if (secretError) {
         console.error('Error fetching OpenAI API key:', secretError);
-        throw new Error('Failed to fetch OpenAI API key');
+        throw new Error('Failed to fetch API key. Please ensure the OpenAI API key is set in Supabase secrets.');
+      }
+
+      if (!apiKey) {
+        throw new Error('OpenAI API key not found. Please set it in Supabase secrets.');
       }
 
       const openai = new OpenAI({
-        apiKey,
+        apiKey: apiKey,
         dangerouslyAllowBrowser: true
       });
       
@@ -59,18 +63,25 @@ const DreamNodeAssistant = () => {
         temperature: 0.7,
       });
 
-      console.log('AI response received:', completion.choices[0]?.message?.content);
-      return completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response. Please try again.';
+      const responseContent = completion.choices[0]?.message?.content;
+      if (!responseContent) {
+        throw new Error('No response generated from OpenAI');
+      }
+
+      console.log('AI response received:', responseContent);
+      return responseContent;
     } catch (error) {
       console.error('Error generating AI response:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw new Error(`Failed to generate response: ${error.message}`);
+      }
+      throw new Error('An unexpected error occurred while generating the response');
     }
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
     
-    // Add user message
     const userMessage: Message = {
       role: 'user',
       content: input
@@ -92,7 +103,7 @@ const DreamNodeAssistant = () => {
       console.error('Error in handleSend:', error);
       toast({
         title: "Error",
-        description: "Failed to generate response. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to generate response. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -127,12 +138,13 @@ const DreamNodeAssistant = () => {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Type your message..."
             className="flex-1 bg-white/5 border-white/10 text-dreamlight"
           />
           <Button 
             onClick={handleSend}
+            disabled={isTyping}
             className="bg-gradient-to-r from-dreampurple to-dreammagenta hover:opacity-90"
           >
             Send
