@@ -59,7 +59,7 @@ const Desktop = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4 text-lg leading-relaxed text-dreamlight">
-            DreamMeld AI is a decentralized protocol that harmonizes human consciousness with generative AI. By creating "Dream Nodes" and "Mind Keys," it allows individuals to store their creative essence on-chain, enabling intuitive, collaborative creation environments. Each Dream Node becomes a personal AI co-pilot, assisting in building next-gen digital art, music, and immersive experiences. MELD fuses the boundaries between the artist and the canvas, forging a community where collective imagination sparks infinite possibilities.
+            DreamMeld AI is a decentralized protocol that harmonizes human consciousness with generative AI. By creating "Dream Nodes" and "Mind Keys," it allows individuals to store their creative essence on-chain, enabling intuitive, collaborative creation environments. Each Dream Node securely stores user-generated creative data, enabling on-chain collaboration in fields like digital art, music, and writing. MELD fuses the boundaries between the artist and the canvas, forging a community where collective imagination sparks infinite possibilities.
           </div>
         </DialogContent>
       </Dialog>
