@@ -1,28 +1,28 @@
 import React from 'react';
-import { Terminal, Key, Play, Cpu } from 'lucide-react';
+import { Terminal, Key, Play, Link } from 'lucide-react';
 import DesktopIcon from './DesktopIcon';
 
 const Desktop = () => {
   const icons = [
     {
-      name: 'Start.exe',
+      name: 'Start',
       icon: <Play className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
       onClick: () => console.log('Start clicked'),
     },
     {
-      name: 'Keys.exe',
+      name: 'Keys',
       icon: <Key className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
       onClick: () => console.log('Keys clicked'),
     },
     {
-      name: 'Process.exe',
-      icon: <Cpu className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
+      name: 'Process',
+      icon: <Terminal className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
       onClick: () => console.log('Process clicked'),
     },
     {
-      name: 'X.exe',
-      icon: <Terminal className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
-      onClick: () => console.log('X clicked'),
+      name: 'X',
+      icon: <Link className="w-8 h-8 text-dreampurple group-hover:text-dreammagenta transition-colors" />,
+      onClick: () => window.open('https://x.com/dreammeldai', '_blank'),
     },
   ];
 
