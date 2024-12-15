@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import OpenAI from 'openai';
+import { useToast } from "@/components/ui/use-toast";
 
 interface Message {
   role: 'assistant' | 'user';
@@ -11,64 +13,81 @@ interface Message {
 const DreamNodeAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant' as const,
+      role: 'assistant',
       content: "Hello! I'm your Dream Node AI assistant. I can help you with questions about AI, technology, creative projects, or any other topics you're interested in. What would you like to discuss?"
     }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const { toast } = useToast();
 
-  const generateResponse = (userInput: string): string => {
-    // Keywords and their associated responses
-    const responses = {
-      'ai': "Artificial Intelligence is rapidly evolving. I can discuss various aspects like machine learning, neural networks, or practical applications. What specific area interests you?",
-      'art': "Digital art has been transformed by AI tools like DALL-E and Midjourney. Would you like to learn more about AI-assisted art creation?",
-      'music': "AI is revolutionizing music production through tools for composition, mixing, and mastering. I can explain more about specific aspects of AI in music.",
-      'help': "I'm here to help! I can discuss technology, provide explanations, or explore creative ideas with you. What specific assistance do you need?",
-      'learn': "Learning about AI and technology is exciting! I can help explain concepts, suggest resources, or discuss specific topics you're interested in.",
-      'how': "I'd be happy to explain how things work. Could you specify what aspect you'd like to learn more about?",
-      'what': "I can provide information and explanations about various topics. What specific subject would you like to know more about?"
-    };
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
+  });
 
-    // Convert input to lowercase for matching
-    const lowercaseInput = userInput.toLowerCase();
-    
-    // Check for keyword matches
-    for (const [keyword, response] of Object.entries(responses)) {
-      if (lowercaseInput.includes(keyword)) {
-        return response;
-      }
+  const generateAIResponse = async (userInput: string) => {
+    try {
+      console.log('Generating AI response for:', userInput);
+      
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful AI assistant focused on technology, creative projects, and innovation. Provide clear, informative responses while maintaining a friendly and engaging tone.'
+          },
+          ...messages.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          })),
+          {
+            role: 'user',
+            content: userInput
+          }
+        ],
+        model: 'gpt-4',
+        temperature: 0.7,
+      });
+
+      console.log('AI response received:', completion.choices[0]?.message?.content);
+      return completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response. Please try again.';
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+      throw error;
     }
-
-    // Default response if no keywords match
-    return `I understand you're interested in "${userInput}". I can provide information about AI, technology, creative projects, or answer other questions you might have. What specific aspect would you like to explore?`;
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     
     // Add user message
     const userMessage: Message = {
-      role: 'user' as const,
+      role: 'user',
       content: input
     };
     
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
-    
-    // Simulate AI thinking
     setIsTyping(true);
     
-    // Generate response with slight delay for realism
-    setTimeout(() => {
+    try {
+      const aiResponse = await generateAIResponse(input);
       const aiMessage: Message = {
-        role: 'assistant' as const,
-        content: generateResponse(input)
+        role: 'assistant',
+        content: aiResponse
       };
       setMessages([...newMessages, aiMessage]);
+    } catch (error) {
+      console.error('Error in handleSend:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate response. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 500); // Random delay between 1-1.5s
+    }
   };
 
   return (
