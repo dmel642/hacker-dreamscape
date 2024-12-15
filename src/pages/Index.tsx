@@ -1,11 +1,16 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React from 'react';
+import Desktop from '@/components/Desktop';
+import Background from '@/components/Background';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen relative overflow-hidden">
+      <Background />
+      <div className="container mx-auto pt-16">
+        <h1 className="text-4xl md:text-6xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow">
+          DreamMeld AI
+        </h1>
+        <Desktop />
       </div>
     </div>
   );
