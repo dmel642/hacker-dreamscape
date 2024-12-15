@@ -19,7 +19,7 @@ const Index = () => {
         <div className="fixed inset-0 bg-dreamdark">
           <div className="absolute inset-0 bg-[url('/lovable-uploads/d7209daa-bfc3-4c3f-bc85-a3035f78bc0b.png')] bg-cover bg-center opacity-50 animate-fade-in" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow">
+            <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow drop-shadow-[0_0_15px_rgba(155,135,245,0.5)] tracking-tight">
               DreamMeld AI
             </h1>
           </div>
@@ -28,8 +28,13 @@ const Index = () => {
         <>
           <Background />
           <div className="container mx-auto pt-16">
-            <h1 className="text-4xl md:text-6xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow">
-              DreamMeld AI
+            <h1 className="text-4xl md:text-6xl font-bold text-center mb-12 relative">
+              <span className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta blur-sm animate-glow">
+                DreamMeld AI
+              </span>
+              <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-dreampurple via-dreamblue to-dreammagenta animate-glow drop-shadow-[0_0_15px_rgba(155,135,245,0.5)] tracking-tight">
+                DreamMeld AI
+              </span>
             </h1>
             <Desktop />
           </div>
