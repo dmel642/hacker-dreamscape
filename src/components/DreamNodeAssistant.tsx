@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import OpenAI from 'openai';
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: 'assistant' | 'user';
@@ -21,14 +22,24 @@ const DreamNodeAssistant = () => {
   const [isTyping, setIsTyping] = useState(false);
   const { toast } = useToast();
 
-  const openai = new OpenAI({
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true
-  });
-
   const generateAIResponse = async (userInput: string) => {
     try {
       console.log('Generating AI response for:', userInput);
+      
+      // Get the OpenAI API key from Supabase
+      const { data: { secret: apiKey }, error: secretError } = await supabase.rpc('get_secret', {
+        name: 'OPENAI_API_KEY'
+      });
+
+      if (secretError || !apiKey) {
+        console.error('Error fetching OpenAI API key:', secretError);
+        throw new Error('Failed to fetch OpenAI API key');
+      }
+
+      const openai = new OpenAI({
+        apiKey: apiKey,
+        dangerouslyAllowBrowser: true
+      });
       
       const completion = await openai.chat.completions.create({
         messages: [
