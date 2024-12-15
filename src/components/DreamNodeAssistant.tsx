@@ -27,7 +27,7 @@ const DreamNodeAssistant = () => {
       console.log('Generating AI response for:', userInput);
       
       const { data: apiKey, error: secretError } = await supabase.rpc('get_secret', {
-        name: 'OPENAI_API_KEY'
+        secret_name: 'OPENAI_API_KEY'
       });
 
       if (secretError) {

@@ -17,7 +17,7 @@ export type Database = {
     Functions: {
       get_secret: {
         Args: {
-          name: string
+          secret_name: string
         }
         Returns: string
       }
